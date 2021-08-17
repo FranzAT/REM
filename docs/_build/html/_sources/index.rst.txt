@@ -6,10 +6,30 @@
 Welcome to REM's documentation!
 ===============================
 
+Real Estate Management
+
+Based on:
+- Python
+- Django Framework
+- MySQL database
+- Bootstrap 4 Framework
+- jQuery JavaScript library
+
+Running on:
+- http://eu.pythonanywhere.com
+- virtual environments for development / testing / staging / production
+
+Goodies:
+- social media login with django-allauth
+- i18n internationalization and localisation
+
+Contents
+--------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
+   quick_start
 
 
 Indices and tables
