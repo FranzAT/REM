@@ -38,8 +38,8 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True  # set in different settings file for each environment
 
-#ALLOWED_HOSTS = []  # allowed hosts maintained in environment specific settings files.
-
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = get_env_variable('HOSTS').split(',')
 
 # Application definition
 
@@ -95,6 +95,15 @@ WSGI_APPLICATION = 'main.wsgi.application'
 #    }
 #}
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': get_env_variable('DATABASE_NAME'),
+        'USER': get_env_variable('DATABASE_USER'),
+        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'HOST': get_env_variable('DATABASE_HOST'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
