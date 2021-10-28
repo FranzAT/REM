@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from main import views
 from django.views.generic.base import TemplateView
 from django.conf.urls.i18n import i18n_patterns
@@ -24,7 +24,8 @@ urlpatterns = [
     path('humans.txt', TemplateView.as_view(template_name="humans.txt", content_type="text/plain"), ),
 ]
 
-urlpatterns += i18n_patterns( 
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('accounts/', include('allauth.urls')),
 )

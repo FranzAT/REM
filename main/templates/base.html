@@ -17,6 +17,7 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+
         <style>
             body {
                 padding-top: 50px;
@@ -49,28 +50,47 @@
             <a class="navbar-brand" href="#">Project name</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="form">
-              <div class="form-group">
-                <input type="text" placeholder="Email" class="form-control">
-              </div>
-              <div class="form-group">
-                <input type="password" placeholder="Password" class="form-control">
-              </div>
-              <button type="submit" class="btn btn-success">Sign in</button>
-            </form>
+            <div class="navbar-form navbar-right">
+              {% if user.is_authenticated %}
+              <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">{% trans 'Sign Out' %}</button>
+              </form>
+              {% else %}
+              <a id="sign_in" href="{% url 'account_login' %}" class="btn btn-primary">{% trans "Sign In" %}</a>
+              <a id="sign_up" href="{% url 'account_signup' %}" class="btn btn-primary">{% trans "Signup" %}</a>
+              {% endif %}
+            </div>
           </div><!--/.navbar-collapse -->
         </div>
       </nav>
     {% endblock %}
 
-    {% block content %}{% endblock %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class ="container alert alert-info alert-dismissible show" role="alert">
+      {{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div> <!-- /container -->
+    {% endfor %}
+    {% endif %}
+
+    {% block jumbotron %}{% endblock %}
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div> <!-- /container -->
 
     <hr>
     <div class="container">
       <footer>
         <p>&copy; Company 2015</p>
       </footer>
-    </div> <!-- /container -->        
+    </div> <!-- /container -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="main/static/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 

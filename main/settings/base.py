@@ -50,6 +50,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+]
+
+INSTALLED_APPS += [
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +86,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -160,3 +171,52 @@ STATIC_ROOT = os.path.join(ROOT_DIR, "static")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Authentication backends used by `allauth`
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+# Customize authorization process
+# `allauth` asks for the email (if possible) in the authorization process. It will ask it to Google, without any verification process, and after logging in, it will redirect the user to the home page.
+
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+SOCIALACCOUNT_QUERY_EMAIL = True
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Gmail SMTP Server
+# https://help.pythonanywhere.com/pages/SMTPForFreeUsers
+# all auth is requiring smtp emailing
+# EMAIL_HOST = get_env_variable('EMAIL_HOST')
+# EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
+# https://help.pythonanywhere.com/pages/GmailAppSpecificPasswords
+# EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = get_env_variable('EMAIL_PORT')
+# EMAIL_USE_TLS = get_env_variable('EMAIL_USE_TLS')
+
+# SendGrid Web API for email
+# https://github.com/sklarsa/django-sendgrid-v5
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_API_KEY = get_env_variable('SENDGRID_API_KEY')
+# https://simpleit.rocks/python/django/adding-email-to-django-the-easiest-way/
+SENDGRID_SANDBOX_MODE_IN_DEBUG=False
+# SENDGRID_ECHO_TO_STDOUT=True
+# https://github.com/sendgrid/sendgrid-python/issues/892
+DEFAULT_FROM_EMAIL = get_env_variable('DEFAULT_FROM_EMAIL')
