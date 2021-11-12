@@ -22,6 +22,7 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), ),
     path('humans.txt', TemplateView.as_view(template_name="humans.txt", content_type="text/plain"), ),
+    path('api/todo/', include('todos.urls')),
 ]
 
 urlpatterns += i18n_patterns(

@@ -59,10 +59,20 @@ INSTALLED_APPS += [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'rest_framework',
+    'corsheaders',
+]
+
+INSTALLED_APPS += [
     'main.apps.userprofile',
 ]
 
+INSTALLED_APPS += [
+    'todos',
+]
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -114,6 +124,9 @@ DATABASES = {
         'USER': get_env_variable('DATABASE_USER'),
         'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
         'HOST': get_env_variable('DATABASE_HOST'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 
@@ -202,6 +215,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+
 # Gmail SMTP Server
 # https://help.pythonanywhere.com/pages/SMTPForFreeUsers
 # all auth is requiring smtp emailing
@@ -221,3 +235,15 @@ SENDGRID_SANDBOX_MODE_IN_DEBUG=False
 # SENDGRID_ECHO_TO_STDOUT=True
 # https://github.com/sendgrid/sendgrid-python/issues/892
 DEFAULT_FROM_EMAIL = get_env_variable('DEFAULT_FROM_EMAIL')
+
+
+# Django Rest Framework (DRF) configuration
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000',
+]
